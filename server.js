@@ -17,21 +17,40 @@ app.use(function(req, res, next) {
 // ADD GET POST PUT DELETE ENDPOINTS HERE
 app.get('/api/items', (req, res) => {  
   knex('todo')
+  // .select(['id','task','done'])
   .select()
-  .then(() => {
+  .then((result) => {
     //do we need return
-    res.json([]);
+    res.json(result);
   });
 });
 
 app.post('/api/items', (req, res) => {
   knex('todo')
-    .insert('task', req.body.task)
-    .returning('id')
-    .then(() => {
-      res.status(201).json();
-    });
+  .insert({'task': req.body.task})
+  .returning(['id', 'task'])
+  .then( (results) => { res.status(201).location(`${res.root}${results[0].id}`).json(results[0]); } );
+  //   .returning(['id', 'task'])
+  //   .then(() => {
+      // console.log('Yolo');
+      //console.log(result);
+      //res.status(201).json(result);
+      //req.get('origin');
+    // });
 });
+
+/* 
+app.post('/api/stories', (req,res)=>{
+  knex('posts').insert({'title':req.body.title,'url':req.body.url,'votes':1})
+  .returning(['id','title'])
+  .then(e=>{
+    res.status(201).json(e);
+  });
+  //console.log(req.body);
+  //res.json(req.body)
+
+});
+*/
 
 let server;
 let knex;
