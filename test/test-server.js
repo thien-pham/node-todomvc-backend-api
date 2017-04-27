@@ -149,32 +149,32 @@ describe('TodoMVC API:', () => {
           err.should.have.status(400);
         });
     });
-  });
+  
 
-  //   /**
-  //    * This test requires you to wire-up the POST /api/items endpoint to the database
-  //    */
-  //   it('should persist the data and respond with new item id', function () {
-  //     const newItem = { title: 'Walk the dog' };
-  //     return chai.request(app)
-  //       .post('/api/items')
-  //       .send(newItem)
-  //       .then(function (result) {
-  //         result.should.have.status(201);
-  //         return knex
-  //           .select('title')
-  //           .from('items')
-  //           .where('id', result.body.id);
-  //       })
-  //       .then(function (result) {
-  //         result.should.have.length(1);
-  //         result[0].should.have.property('title', newItem.title);
-  //       })
-  //       .catch((err) => {
-  //         throw (err);
-  //       });
-  //   });
-
+    /**
+     * This test requires you to wire-up the POST /api/items endpoint to the database
+     */
+    it('should persist the data and respond with new item id', function () {
+      const newItem = { task: 'Walk the dog' };
+      return chai.request(app)
+        .post('/api/items')
+        .send(newItem)
+        .then(function (result) {
+          result.should.have.status(201);
+          return knex
+            .select('task')
+            .from('todo')
+            .where('id', result.body.id);
+        })
+        .then(function (result) {
+          result.should.have.length(1);
+          result[0].should.have.property('task', newItem.task);
+        })
+        .catch((err) => {
+          throw (err);
+        });
+    });
+});
   //   /**
   //    * This test requires you to add a URL to the response which has the location of the new item. 
   //    */
