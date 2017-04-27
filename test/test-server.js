@@ -79,64 +79,64 @@ describe('TodoMVC API:', () => {
         });
     });
 
-  // });
 
-  // /** Create a database and wire-up endpoints
-  //  * PLEASE NOTE: 
-  //  * - You will need to decipher the database name, table name and column names from the 
-  //  * config.js, starter server.js and the tests
-  //  * - And previously working tests may fail as the database is wired-up
-  //  */
-  // describe('GET endpoints:', function () {
-  //   /**
-  //    * This requires you to wire-up the GET /api/items endpoint to knex and postgres
-  //    */
-  //   it('should respond with the items in the database', function () {
-  //     const newItem = { title: 'Buy soy milk' };
-  //     let itemId;
-  //     return knex('items')
-  //       .insert(newItem)
-  //       .returning(['id'])
-  //       .then(function (result) {
-  //         itemId = result[0].id;
-  //         return chai.request(app).get('/api/items/').send();
-  //       })
-  //       .then(function (result) {
-  //         result.should.have.status(200);
-  //         result.body.should.be.a('array');
-  //         result.body[0].should.have.property('id', itemId);
+  /** Create a database and wire-up endpoints
+   * PLEASE NOTE: 
+   * - You will need to decipher the database name, table name and column names from the 
+   * config.js, starter server.js and the tests
+   * - And previously working tests may fail as the database is wired-up
+   */
+  describe('GET endpoints:', function () {
+    /**
+     * This requires you to wire-up the GET /api/items endpoint to knex and postgres
+     */
+    it('should respond with the items in the database', function () {
+      const newItem = { task: 'Buy soy milk' };
+      let itemId;
+      return knex('todo')
+        .insert(newItem)
+        .returning(['id'])
+        .then(function (result) {
+          itemId = result[0].id;
+          return chai.request(app).get('/api/items/').send();
+        })
+        .then(function (result) {
+          result.should.have.status(200);
+          result.body.should.be.a('array');
+          result.body[0].should.have.property('id', itemId);
 
-  //       })
-  //       .catch((err) => {
-  //         throw (err);
-  //       });
-  //   });
+        })
+        .catch((err) => {
+          throw (err);
+        });
+    });
 
-  //   /**
-  //    * This requires you to create a GET /api/items/:id endpoint and 
-  //    * wire it up to knex and postgres
-  //    */
-  //   //Can not have same it names
-  //   it('should respond with the sumsing items in the database', function () {
-  //     const newItem = { title: 'Buy soy milk' };
-  //     let itemId;
-  //     return knex('items')
-  //       .insert(newItem)
-  //       .returning(['id'])
-  //       .then(function (result) {
-  //         itemId = result[0].id;
-  //         return chai.request(app).get(`/api/items/${itemId}`).send();
-  //       })
-  //       .then(function (result) {
-  //         result.should.have.status(200);
-  //         result.body.should.have.property('id', itemId);
+    /**
+     * This requires you to create a GET /api/items/:id endpoint and 
+     * wire it up to knex and postgres
+     */
+    //Can not have same it names
+    it('should respond with the id of the object in the database', function () {
+      const newItem = { task: 'Buy soy milk' };
+      let itemId;
+      return knex('todo')
+        .insert(newItem)
+        .returning(['id'])
+        .then(function (result) {
+          itemId = result[0].id;
+          console.log('this is the test task', result);
+          return chai.request(app).get(`/api/items/${itemId}`).send();
+        })
+        .then(function (result) {
+          result.should.have.status(200);
+          result.body.should.have.property('id', itemId);
 
-  //       })
-  //       .catch((err) => {
-  //         throw (err);
-  //       });
-  //   });
-  // });
+        })
+        .catch((err) => {
+          throw (err);
+        });
+    });
+  });
 
   // describe('POST endpoint', function () {
   //   /**
@@ -345,6 +345,6 @@ describe('TodoMVC API:', () => {
   //       });
   //   });
 
-  });
+    });
 
-});
+  });

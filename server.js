@@ -29,29 +29,20 @@ app.post('/api/items', (req, res) => {
   knex('todo')
   .insert({'task': req.body.task})
   .returning(['id', 'task'])
-  .then( (results) => { res.status(201).location(`${res.root}${results[0].id}`).json(results[0]); } );
-  //   .returning(['id', 'task'])
-  //   .then(() => {
-      // console.log('Yolo');
-      //console.log(result);
-      //res.status(201).json(result);
-      //req.get('origin');
-    // });
-});
-
-/* 
-app.post('/api/stories', (req,res)=>{
-  knex('posts').insert({'title':req.body.title,'url':req.body.url,'votes':1})
-  .returning(['id','title'])
-  .then(e=>{
-    res.status(201).json(e);
+  .then( (result) => { res.status(201).location(`${res.root}${result[0].id}`).json(result[0]); 
   });
-  //console.log(req.body);
-  //res.json(req.body)
-
 });
-*/
 
+app.get('/api/items/:id', (req, res) => {
+  console.log('test');
+  knex('todo')
+    .select()
+    .where({'id': req.params.id})
+    .then((result) => {
+      // console.log(req.params.id);
+      res.status(200).json(result);
+     });
+});
 let server;
 let knex;
 function runServer(database = DATABASE, port = PORT) {
