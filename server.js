@@ -34,15 +34,15 @@ app.post('/api/items', (req, res) => {
 });
 
 app.get('/api/items/:id', (req, res) => {
-  console.log('test');
   knex('todo')
     .select()
     .where({'id': req.params.id})
     .then((result) => {
       // console.log(req.params.id);
-      res.status(200).json(result);
-     });
+      res.status(200).json(result[0]);
+    });
 });
+
 let server;
 let knex;
 function runServer(database = DATABASE, port = PORT) {
