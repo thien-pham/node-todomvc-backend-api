@@ -135,20 +135,21 @@ describe('TodoMVC API:', () => {
       });
     });
 
-  // describe('POST endpoint', function () {
-  //   /**
-  //    * This test requires you to check the incoming post body to make sure it contains
-  //    * valid data before saving to the database
-  //    */
-  //   it('should respond to an improper POST with status 400', function () {
-  //     const newItem = { foo: 'bar' };
-  //     return chai.request(app)
-  //       .post('/api/items')
-  //       .send(newItem)
-  //       .catch((err) => {
-  //         err.should.have.status(400);
-  //       });
-  //   });
+  describe('POST endpoint', function () {
+    /**
+     * This test requires you to check the incoming post body to make sure it contains
+     * valid data before saving to the database
+     */
+    it('should respond to an improper POST with status 400', function () {
+      const newItem = { foo: 'bar' };
+      return chai.request(app)
+        .post('/api/items')
+        .send(newItem)
+        .catch((err) => {
+          err.should.have.status(400);
+        });
+    });
+  });
 
   //   /**
   //    * This test requires you to wire-up the POST /api/items endpoint to the database

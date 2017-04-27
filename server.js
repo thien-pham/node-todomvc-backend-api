@@ -26,10 +26,13 @@ app.get('/api/items', (req, res) => {
 });
 
 app.post('/api/items', (req, res) => {
+  if(!('task' in req.body)) {
+    return res.sendStatus(400);
+  }
   knex('todo')
-  .insert({'task': req.body.task})
-  .returning(['id', 'task'])
-  .then( (result) => { res.status(201).location(`${res.root}${result[0].id}`).json(result[0]); 
+    .insert({'task': req.body.task})
+    .returning(['id', 'task'])
+    .then( (result) => { res.status(201).location(`${res.root}${result[0].id}`).json(result[0]); 
   });
 });
 
@@ -40,8 +43,9 @@ app.get('/api/items/:id', (req, res) => {
     .then((result) => {
       // console.log(req.params.id);
       res.status(200).json(result[0]);
-    });
+     });
 });
+
 
 let server;
 let knex;
