@@ -32,7 +32,7 @@ app.post('/api/items', (request, response) => {
   
   knex('todo')
     .insert({'task': request.body.task, 'url': request.url})
-    .returning(['id', 'task', 'url'])
+    .returning(['id', 'task', 'url', 'done'])
     .then( (result) => {
       const taskUrl = `${result[0].url}/${result[0].id}`;
       result[0].url = `localhost:8080${taskUrl}`;      

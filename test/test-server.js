@@ -197,31 +197,31 @@ describe('TodoMVC API:', () => {
           throw (err);
         });
       });
+   
+    /**
+     * This test requires you to add a `completed` column to the database which defaults to false
+     */
+    it('should respond with a `done` property is set to false', function () {
+      const newItem = { task: 'Mow the lawn' };
+      return chai.request(app)
+        .post('/api/items')
+        .send(newItem)
+        .then(function (result) {
+          result.body.should.have.property('done', false);
+          return knex
+            .select('done')
+            .from('todo')
+            .where('id', result.body.id);
+        })
+        .then(function (result) {
+          result.should.have.length(1);
+          result[0].should.have.property('done', false);
+        })
+        .catch((err) => {
+          throw (err);
+        });
     });
-  //   /**
-  //    * This test requires you to add a `completed` column to the database which defaults to false
-  //    */
-  //   it('should respond with a `completed` property is set to false', function () {
-  //     const newItem = { title: 'Mow the lawn' };
-  //     return chai.request(app)
-  //       .post('/api/items')
-  //       .send(newItem)
-  //       .then(function (result) {
-  //         result.body.should.have.property('completed', false);
-  //         return knex
-  //           .select('completed')
-  //           .from('items')
-  //           .where('id', result.body.id);
-  //       })
-  //       .then(function (result) {
-  //         result.should.have.length(1);
-  //         result[0].should.have.property('completed', false);
-  //       })
-  //       .catch((err) => {
-  //         throw (err);
-  //       });
-  //   });
-
+ });
   //   /** 
   //    * This test requires you to add a `location` header with the URL of the item 
   //    * 
