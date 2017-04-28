@@ -252,39 +252,40 @@ describe('TodoMVC API:', () => {
           throw (err);
         });
     });
-
-
     });
 
-  // describe('PUT endpoint', function () {
-  //   /**
-  //    * This test requires you to wireup the database to the PUT endpoint so the title can be changed
-  //    */
-  //   it('should change a todo title by PUTing', function () {
-  //     const newItem = { title: 'Buy soy milk' };
-  //     const putItem = { title: 'Buy real milk' };
-  //     let itemId;
-  //     return knex('items')
-  //       .insert(newItem)
-  //       .returning(['id'])
-  //       .then(function (result) {
-  //         itemId = result[0].id;
-  //         return chai.request(app).put(`/api/items/${itemId}`).send(putItem);
-  //       })
-  //       .then(function (result) {
-  //         result.body.should.have.property('title', putItem.title);
-  //         return knex
-  //           .select('title')
-  //           .from('items')
-  //           .where('id', itemId);
-  //       })
-  //       .then(function (result) {
-  //         result[0].should.have.property('title', putItem.title);
-  //       })
-  //       .catch((err) => {
-  //         throw (err);
-  //       });
-  //   });
+  
+
+  describe('PUT endpoint', function () {
+    /**
+     * This test requires you to wireup the database to the PUT endpoint so the title can be changed
+     */
+    it('should change a todo task by PUTing', function () {
+      const newItem = { task: 'Buy soy milk' };
+      const putItem = { task: 'Buy real milk' };
+      let itemId;
+      return knex('todo')
+        .insert(newItem)
+        .returning(['id'])
+        .then(function (result) {
+          itemId = result[0].id;
+          return chai.request(app).put(`/api/items/${itemId}`).send(putItem);
+        })
+        .then(function (result) {
+          result.body.should.have.property('task', putItem.task);
+          return knex
+            .select('task')
+            .from('todo')
+            .where('id', itemId);
+        })
+        .then(function (result) {
+          result[0].should.have.property('task', putItem.task);
+        })
+        .catch((err) => {
+          throw (err);
+        });
+    });
+      });
   //   /**
   //    * This test requires you to wireup the database to the PUT endpoint so the completed status can be changed
   //    */

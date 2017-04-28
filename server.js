@@ -45,7 +45,18 @@ app.get('/api/items/:id', (req, res) => {
     .select()
     .where({'id': req.params.id})
     .then((result) => {
+      console.log(result);
       res.status(200).json(result[0]);
+    });
+});
+
+app.put('/api/items/:id', (req, res) => {
+  knex('todo')
+    .where('id', req.params.id)
+    .update('task', req.body.task)
+    .returning(['task', 'id'])
+    .then((result) => {
+      res.json(result[0]);
     });
 });
 
