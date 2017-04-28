@@ -6,7 +6,7 @@ const app = express();
 app.use(bodyParser.json());
 
 // ADD EXPRESS MIDDLEWARE FOR CORS HEADERS HERE
-app.use(function(req, res, next) { 
+app.use(function(req, res, next) {   
   res.header('Access-Control-Allow-Origin', 'http://chai-http.test');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
@@ -36,7 +36,7 @@ app.post('/api/items', (request, response) => {
     .then( (result) => {
       const taskUrl = `${result[0].url}/${result[0].id}`;
       result[0].url = `localhost:8080${taskUrl}`;      
-      response.status(201).location(`${result[0].id}`).json(result[0]); 
+      response.status(201).location(result[0].url).json(result[0]); 
     });
 });
 

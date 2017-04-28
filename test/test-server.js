@@ -201,7 +201,7 @@ describe('TodoMVC API:', () => {
     /**
      * This test requires you to add a `completed` column to the database which defaults to false
      */
-    it('should respond with a `done` property is set to false', function () {
+      it('should respond with a `done` property is set to false', function () {
       const newItem = { task: 'Mow the lawn' };
       return chai.request(app)
         .post('/api/items')
@@ -221,40 +221,40 @@ describe('TodoMVC API:', () => {
           throw (err);
         });
     });
- });
-  //   /** 
-  //    * This test requires you to add a `location` header with the URL of the item 
-  //    * 
-  //    * HINT: 
-  //    * - http://stackoverflow.com/a/10185427
-  //    * - https://expressjs.com/en/api.html#req.protocol
-  //    */
-  //   it('should respond with a valid location header', function () {
-  //     const newItem = { title: 'Buy milk' };
-  //     return chai.request(app)
-  //       .post('/api/items')
-  //       .send(newItem)
-  //       .then(function (result) {
-  //         result.should.have.header('location');
-  //         result.body.should.have.property('url').is.a('string');
+ 
+    /** 
+     * This test requires you to add a `location` header with the URL of the item 
+     * 
+     * HINT: 
+     * - http://stackoverflow.com/a/10185427
+     * - https://expressjs.com/en/api.html#req.protocol
+     */
+      it('should respond with a valid location header', function () {
+      const newItem = { task: 'Buy milk' };
+      return chai.request(app)
+        .post('/api/items')
+        .send(newItem)
+        .then(function (result) {
+          result.should.have.header('location');
+          result.body.should.have.property('url').is.a('string');
 
-  //         const url = result.get('location');
-  //         const split = url.lastIndexOf('/');
-  //         const root = url.slice(0, split);
-  //         const path = url.substr(split);
+          const url = result.get('location');
+          const split = url.lastIndexOf('/');
+          const root = url.slice(0, split);
+          const path = url.substr(split);
 
-  //         return chai.request(root).get(path);
-  //       })
-  //       .then(function (result) {
-  //         result.body.should.have.property('title', newItem.title);
-  //       })
-  //       .catch((err) => {
-  //         throw (err);
-  //       });
-  //   });
+          return chai.request(root).get(path);
+        })
+        .then(function (result) {
+          result.body.should.have.property('task', newItem.task);
+        })
+        .catch((err) => {
+          throw (err);
+        });
+    });
 
 
-  // });
+    });
 
   // describe('PUT endpoint', function () {
   //   /**
