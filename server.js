@@ -60,6 +60,14 @@ app.put('/api/items/:id', (req, res) => {
     });
 });
 
+app.del('/api/items/:id', (req, res) => {
+  knex('todo')
+    .where('id', req.params.id)
+    .del()
+    .then((result) => {
+      res.status(204).end();
+    });
+});
 
 let server;
 let knex;

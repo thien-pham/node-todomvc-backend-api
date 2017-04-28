@@ -79,7 +79,6 @@ describe('TodoMVC API:', () => {
         });
     });
 
-
   /** Create a database and wire-up endpoints
    * PLEASE NOTE: 
    * - You will need to decipher the database name, table name and column names from the 
@@ -149,7 +148,6 @@ describe('TodoMVC API:', () => {
           err.should.have.status(400);
         });
       });
-  
 
     /**
      * This test requires you to wire-up the POST /api/items endpoint to the database
@@ -254,8 +252,6 @@ describe('TodoMVC API:', () => {
       });
     });
 
-  
-
     describe('PUT endpoint', function () {
     /**
      * This test requires you to wireup the database to the PUT endpoint so the title can be changed
@@ -316,34 +312,33 @@ describe('TodoMVC API:', () => {
       });
     });
 
-  // describe('DELETE endpoint', function () {
-  //   /**
-  //    * This test requires you to wire-up the delete endpoint so items can be deleted.
-  //    */
-  //   it('should DELETE an item', function () {
-  //     const newItem = { title: 'Buy soy milk' };
-  //     let itemId;
-  //     return knex('items')
-  //       .insert(newItem)
-  //       .returning(['id'])
-  //       .then(function (result) {
-  //         itemId = result[0].id;
-  //         return chai.request(app).delete(`/api/items/${itemId}`).send();
-  //       })
-  //       .then(function () {
-  //         return knex
-  //           .select('title')
-  //           .from('items')
-  //           .where('id', itemId);
-  //       })
-  //       .then(function (result) {
-  //         result.should.be.empty;
-  //       })
-  //       .catch((err) => {
-  //         throw (err);
-  //       });
-  //   });
-
+  describe('DELETE endpoint', function () {
+    /**
+     * This test requires you to wire-up the delete endpoint so items can be deleted.
+     */
+    it('should DELETE an item', function () {
+      const newItem = { task: 'Buy soy milk' };
+      let itemId;
+      return knex('todo')
+        .insert(newItem)
+        .returning(['id'])
+        .then(function (result) {
+          itemId = result[0].id;
+          return chai.request(app).delete(`/api/items/${itemId}`).send();
+        })
+        .then(function () {
+          return knex
+            .select('task')
+            .from('todo')
+            .where('id', itemId);
+        })
+        .then(function (result) {
+          result.should.be.empty;
+        })
+        .catch((err) => {
+          throw (err);
+        });
+      });
+    });
   });
-
 });
