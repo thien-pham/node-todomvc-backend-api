@@ -6,7 +6,7 @@ exports.DATABASE = {
   client: 'pg',
   connection: DATABASE_URL,
   //debug: true,
-  pool: { min: 0, max: 3 }
+  pool: { min: 0, max: 5 }
 };
 
 exports.PORT = process.env.PORT || 8080; 

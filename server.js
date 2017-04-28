@@ -7,7 +7,7 @@ app.use(bodyParser.json());
 
 // ADD EXPRESS MIDDLEWARE FOR CORS HEADERS HERE
 app.use(function(req, res, next) {   
-  res.header('Access-Control-Allow-Origin', 'http://chai-http.test');
+  res.header('Access-Control-Allow-Origin', req.get('origin'));
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
   res.header('Access-Control-Max-Age', '86400');
@@ -60,11 +60,11 @@ app.put('/api/items/:id', (req, res) => {
     });
 });
 
-app.del('/api/items/:id', (req, res) => {
+app.delete('/api/items/:id', (req, res) => {
   knex('todo')
     .where('id', req.params.id)
     .del()
-    .then((result) => {
+    .then(() => {
       res.status(204).end();
     });
 });
