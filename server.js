@@ -53,8 +53,8 @@ app.get('/api/items/:id', (req, res) => {
 app.put('/api/items/:id', (req, res) => {
   knex('todo')
     .where('id', req.params.id)
-    .update('task', req.body.task)
-    .returning(['task', 'id'])
+    .update({ 'task': req.body.task, 'done': true })
+    .returning(['task', 'id', 'done'])
     .then((result) => {
       res.json(result[0]);
     });

@@ -202,8 +202,8 @@ describe('TodoMVC API:', () => {
      * This test requires you to add a `completed` column to the database which defaults to false
      */
       it('should respond with a `done` property is set to false', function () {
-      const newItem = { task: 'Mow the lawn' };
-      return chai.request(app)
+        const newItem = { task: 'Mow the lawn' };
+        return chai.request(app)
         .post('/api/items')
         .send(newItem)
         .then(function (result) {
@@ -220,7 +220,7 @@ describe('TodoMVC API:', () => {
         .catch((err) => {
           throw (err);
         });
-    });
+      });
  
     /** 
      * This test requires you to add a `location` header with the URL of the item 
@@ -230,8 +230,8 @@ describe('TodoMVC API:', () => {
      * - https://expressjs.com/en/api.html#req.protocol
      */
       it('should respond with a valid location header', function () {
-      const newItem = { task: 'Buy milk' };
-      return chai.request(app)
+        const newItem = { task: 'Buy milk' };
+        return chai.request(app)
         .post('/api/items')
         .send(newItem)
         .then(function (result) {
@@ -251,20 +251,20 @@ describe('TodoMVC API:', () => {
         .catch((err) => {
           throw (err);
         });
-    });
+      });
     });
 
   
 
-  describe('PUT endpoint', function () {
+    describe('PUT endpoint', function () {
     /**
      * This test requires you to wireup the database to the PUT endpoint so the title can be changed
      */
-    it('should change a todo task by PUTing', function () {
-      const newItem = { task: 'Buy soy milk' };
-      const putItem = { task: 'Buy real milk' };
-      let itemId;
-      return knex('todo')
+      it('should change a todo task by PUTing', function () {
+        const newItem = { task: 'Buy soy milk' };
+        const putItem = { task: 'Buy real milk' };
+        let itemId;
+        return knex('todo')
         .insert(newItem)
         .returning(['id'])
         .then(function (result) {
@@ -284,37 +284,37 @@ describe('TodoMVC API:', () => {
         .catch((err) => {
           throw (err);
         });
-    });
       });
-  //   /**
-  //    * This test requires you to wireup the database to the PUT endpoint so the completed status can be changed
-  //    */
-  //   it('should PUT a change to the `completed` field of an item', function () {
-  //     const newItem = { title: 'Buy soy milk' };
-  //     const putItem = { completed: true };
-  //     let itemId;
-  //     return knex('items')
-  //       .insert(newItem)
-  //       .returning(['id'])
-  //       .then(function (result) {
-  //         itemId = result[0].id;
-  //         return chai.request(app).put(`/api/items/${itemId}`).send(putItem);
-  //       })
-  //       .then(function (result) {
-  //         result.body.should.have.property('completed', true);
-  //         return knex
-  //           .select('completed')
-  //           .from('items')
-  //           .where('id', itemId);
-  //       })
-  //       .then(function (result) {
-  //         result[0].should.have.property('completed', true);
-  //       })
-  //       .catch((err) => {
-  //         throw (err);
-  //       });
-  //   });
-  // });
+      
+    /**
+     * This test requires you to wireup the database to the PUT endpoint so the completed status can be changed
+     */
+      it('should PUT a change to the `done` field of an item', function () {
+        const newItem = { task: 'Buy soy milk' };
+        const putItem = { done: true };
+        let itemId;
+        return knex('todo')
+        .insert(newItem)
+        .returning(['id'])
+        .then(function (result) {
+          itemId = result[0].id;
+          return chai.request(app).put(`/api/items/${itemId}`).send(putItem);
+        })
+        .then(function (result) {
+          result.body.should.have.property('done', true);
+          return knex
+            .select('done')
+            .from('todo')
+            .where('id', itemId);
+        })
+        .then(function (result) {
+          result[0].should.have.property('done', true);
+        })
+        .catch((err) => {
+          throw (err);
+        });
+      });
+    });
 
   // describe('DELETE endpoint', function () {
   //   /**
