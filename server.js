@@ -35,8 +35,7 @@ app.post('/api/items', (request, response) => {
     .returning(['id', 'task', 'url'])
     .then( (result) => {
       const taskUrl = `${result[0].url}/${result[0].id}`;
-      result[0].url = taskUrl;
-      console.log(result[0]);
+      result[0].url = `localhost:8080${taskUrl}`;      
       response.status(201).location(`${result[0].id}`).json(result[0]); 
     });
 });

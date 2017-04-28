@@ -135,28 +135,28 @@ describe('TodoMVC API:', () => {
       });
     });
 
-  describe('POST endpoint', function () {
+    describe('POST endpoint', function () {
     /**
      * This test requires you to check the incoming post body to make sure it contains
      * valid data before saving to the database
      */
-    it('should respond to an improper POST with status 400', function () {
-      const newItem = { foo: 'bar' };
-      return chai.request(app)
+      it('should respond to an improper POST with status 400', function () {
+        const newItem = { foo: 'bar' };
+        return chai.request(app)
         .post('/api/items')
         .send(newItem)
         .catch((err) => {
           err.should.have.status(400);
         });
-    });
+      });
   
 
     /**
      * This test requires you to wire-up the POST /api/items endpoint to the database
      */
-    it('should persist the data and respond with new item id', function () {
-      const newItem = { task: 'Walk the dog' };
-      return chai.request(app)
+      it('should persist the data and respond with new item id', function () {
+        const newItem = { task: 'Walk the dog' };
+        return chai.request(app)
         .post('/api/items')
         .send(newItem)
         .then(function (result) {
@@ -173,14 +173,14 @@ describe('TodoMVC API:', () => {
         .catch((err) => {
           throw (err);
         });
-    });
+      });
 
     /**
      * This test requires you to add a URL to the response which has the location of the new item. 
      */
-    it('should respond with a URL which can be used to retrieve the new item', function () {
-      const newItem = { task: 'Buy milk' , url: 'Chicken'};
-      return chai.request(app)
+      it('should respond with a URL which can be used to retrieve the new item', function () {
+        const newItem = { task: 'Buy milk' };
+        return chai.request(app)
         .post('/api/items')
         .send(newItem)
         .then(function (result) {
@@ -196,8 +196,8 @@ describe('TodoMVC API:', () => {
         .catch((err) => {
           throw (err);
         });
+      });
     });
-  });
   //   /**
   //    * This test requires you to add a `completed` column to the database which defaults to false
   //    */
