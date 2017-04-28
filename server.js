@@ -5,9 +5,15 @@ const { DATABASE, PORT } = require('./config');
 const app = express();
 app.use(bodyParser.json());
 
+
 // ADD EXPRESS MIDDLEWARE FOR CORS HEADERS HERE
-app.use(function(req, res, next) {   
-  res.header('Access-Control-Allow-Origin', req.get('origin'));
+app.use(function(req, res, next) {  
+  if (require.main === module) {
+    res.header('Access-Control-Allow-Origin', req.get('origin'));
+  } 
+  else {
+    res.header('Access-Control-Allow-Origin', 'http://chai-http.test');
+  }
   res.header('Access-Control-Allow-Headers', 'Content-Type');
   res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
   res.header('Access-Control-Max-Age', '86400');
@@ -105,5 +111,6 @@ if (require.main === module) {
     throw err;
   });
 }
+
 
 module.exports = { app, runServer, closeServer };
