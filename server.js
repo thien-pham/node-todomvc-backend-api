@@ -16,32 +16,30 @@ app.use(function(req, res, next) {
 
 // ADD GET POST PUT DELETE ENDPOINTS HERE
 app.get('/api/items', (req, res) => {  
-  knex('todo')
-  // .select(['id','task','done'])
+  knex('items')
   .select()
   .then((result) => {
-    //do we need return
     res.json(result);
   });
 });
 
 app.post('/api/items', (request, response) => {
-  if(!('task' in request.body)) {
+  if(!('title' in request.body)) {
     return response.sendStatus(400);
   }
   
-  knex('todo')
-    .insert({'task': request.body.task, 'url': request.url})
-    .returning(['id', 'task', 'url', 'done'])
+  knex('items')
+    .insert({'title': request.body.title, 'url': request.url})
+    .returning(['id', 'title', 'url', 'completed'])
     .then( (result) => {
-      const taskUrl = `${result[0].url}/${result[0].id}`;
-      result[0].url = `localhost:8080${taskUrl}`;      
+      const titleUrl = `${result[0].url}/${result[0].id}`;
+      result[0].url = `localhost:8080${titleUrl}`;      
       response.status(201).location(result[0].url).json(result[0]); 
     });
 });
 
 app.get('/api/items/:id', (req, res) => {
-  knex('todo')
+  knex('items')
     .select()
     .where({'id': req.params.id})
     .then((result) => {
@@ -51,17 +49,17 @@ app.get('/api/items/:id', (req, res) => {
 });
 
 app.put('/api/items/:id', (req, res) => {
-  knex('todo')
+  knex('items')
     .where('id', req.params.id)
-    .update({ 'task': req.body.task, 'done': true })
-    .returning(['task', 'id', 'done'])
+    .update({ 'title': req.body.title, 'completed': true })
+    .returning(['title', 'id', 'completed'])
     .then((result) => {
       res.json(result[0]);
     });
 });
 
 app.delete('/api/items/:id', (req, res) => {
-  knex('todo')
+  knex('items')
     .where('id', req.params.id)
     .del()
     .then(() => {

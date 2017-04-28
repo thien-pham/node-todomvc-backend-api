@@ -7,13 +7,13 @@ const knex = require('knex')(DATABASE);
 chai.should();
 chai.use(chaiHttp);
 
-describe('TodoMVC API:', () => {
+describe('itemsMVC API:', () => {
   // before runs once at the beginning of the test suite
   before(() => runServer());
 
   // afterEach runs once at the *end* of each test
   afterEach(() => {
-    return knex('todo')
+    return knex('items')
       .del()
       .catch((err) => {
         console.error('ERROR', err.message);
@@ -44,7 +44,7 @@ describe('TodoMVC API:', () => {
           result.should.have.status(200);
           result.should.be.json;
           result.body.should.be.a('array');
-          // result.body.should.be.empty;
+          result.body.should.be.empty;
           result.should.have.header('Access-Control-Allow-Origin', 'http://chai-http.test');
           result.should.have.header('Access-Control-Allow-Headers', 'Content-Type');
           result.should.have.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE');
@@ -63,7 +63,7 @@ describe('TodoMVC API:', () => {
      * HINT: http://www.restpatterns.org/HTTP_Status_Codes/204_-_No_Content
      */
     it('should respond to POST with status 201 and the item title which was POSTed to it', function () {
-      const newItem = { task: 'Walk the dog' };
+      const newItem = { title: 'Walk the dog' };
       return chai.request(app)
         .post('/api/items')
         .send(newItem)
@@ -71,7 +71,7 @@ describe('TodoMVC API:', () => {
           result.should.have.status(201);
           result.should.be.json;
           result.body.should.be.a('object');
-          result.body.should.have.property('task', newItem.task);
+          result.body.should.have.property('title', newItem.title);
           result.should.have.header('location');
         })
         .catch((err) => {
@@ -90,9 +90,9 @@ describe('TodoMVC API:', () => {
      * This requires you to wire-up the GET /api/items endpoint to knex and postgres
      */
       it('should respond with the items in the database', function () {
-        const newItem = { task: 'Buy soy milk' };
+        const newItem = { title: 'Buy soy milk' };
         let itemId;
-        return knex('todo')
+        return knex('items')
         .insert(newItem)
         .returning(['id'])
         .then(function (result) {
@@ -115,9 +115,9 @@ describe('TodoMVC API:', () => {
      */
     //Can not have same it names
       it('should respond with the id of the object in the database', function () {
-        const newItem = { task: 'Buy soy milk' };
+        const newItem = { title: 'Buy soy milk' };
         let itemId;
-        return knex('todo')
+        return knex('items')
         .insert(newItem)
         .returning(['id'])
         .then(function (result) {
@@ -153,20 +153,20 @@ describe('TodoMVC API:', () => {
      * This test requires you to wire-up the POST /api/items endpoint to the database
      */
       it('should persist the data and respond with new item id', function () {
-        const newItem = { task: 'Walk the dog' };
+        const newItem = { title: 'Walk the dog' };
         return chai.request(app)
         .post('/api/items')
         .send(newItem)
         .then(function (result) {
           result.should.have.status(201);
           return knex
-            .select('task')
-            .from('todo')
+            .select('title')
+            .from('items')
             .where('id', result.body.id);
         })
         .then(function (result) {
           result.should.have.length(1);
-          result[0].should.have.property('task', newItem.task);
+          result[0].should.have.property('title', newItem.title);
         })
         .catch((err) => {
           throw (err);
@@ -177,7 +177,7 @@ describe('TodoMVC API:', () => {
      * This test requires you to add a URL to the response which has the location of the new item. 
      */
       it('should respond with a URL which can be used to retrieve the new item', function () {
-        const newItem = { task: 'Buy milk' };
+        const newItem = { title: 'Buy milk' };
         return chai.request(app)
         .post('/api/items')
         .send(newItem)
@@ -189,7 +189,7 @@ describe('TodoMVC API:', () => {
           return chai.request(root).get(path);
         })
         .then(function (result) {
-          result.body.should.have.property('task', newItem.task);
+          result.body.should.have.property('title', newItem.title);
         })
         .catch((err) => {
           throw (err);
@@ -199,21 +199,21 @@ describe('TodoMVC API:', () => {
     /**
      * This test requires you to add a `completed` column to the database which defaults to false
      */
-      it('should respond with a `done` property is set to false', function () {
-        const newItem = { task: 'Mow the lawn' };
+      it('should respond with a `completed` property is set to false', function () {
+        const newItem = { title: 'Mow the lawn' };
         return chai.request(app)
         .post('/api/items')
         .send(newItem)
         .then(function (result) {
-          result.body.should.have.property('done', false);
+          result.body.should.have.property('completed', false);
           return knex
-            .select('done')
-            .from('todo')
+            .select('completed')
+            .from('items')
             .where('id', result.body.id);
         })
         .then(function (result) {
           result.should.have.length(1);
-          result[0].should.have.property('done', false);
+          result[0].should.have.property('completed', false);
         })
         .catch((err) => {
           throw (err);
@@ -228,7 +228,7 @@ describe('TodoMVC API:', () => {
      * - https://expressjs.com/en/api.html#req.protocol
      */
       it('should respond with a valid location header', function () {
-        const newItem = { task: 'Buy milk' };
+        const newItem = { title: 'Buy milk' };
         return chai.request(app)
         .post('/api/items')
         .send(newItem)
@@ -244,7 +244,7 @@ describe('TodoMVC API:', () => {
           return chai.request(root).get(path);
         })
         .then(function (result) {
-          result.body.should.have.property('task', newItem.task);
+          result.body.should.have.property('title', newItem.title);
         })
         .catch((err) => {
           throw (err);
@@ -256,11 +256,11 @@ describe('TodoMVC API:', () => {
     /**
      * This test requires you to wireup the database to the PUT endpoint so the title can be changed
      */
-      it('should change a todo task by PUTing', function () {
-        const newItem = { task: 'Buy soy milk' };
-        const putItem = { task: 'Buy real milk' };
+      it('should change a items title by PUTing', function () {
+        const newItem = { title: 'Buy soy milk' };
+        const putItem = { title: 'Buy real milk' };
         let itemId;
-        return knex('todo')
+        return knex('items')
         .insert(newItem)
         .returning(['id'])
         .then(function (result) {
@@ -268,14 +268,14 @@ describe('TodoMVC API:', () => {
           return chai.request(app).put(`/api/items/${itemId}`).send(putItem);
         })
         .then(function (result) {
-          result.body.should.have.property('task', putItem.task);
+          result.body.should.have.property('title', putItem.title);
           return knex
-            .select('task')
-            .from('todo')
+            .select('title')
+            .from('items')
             .where('id', itemId);
         })
         .then(function (result) {
-          result[0].should.have.property('task', putItem.task);
+          result[0].should.have.property('title', putItem.title);
         })
         .catch((err) => {
           throw (err);
@@ -285,11 +285,11 @@ describe('TodoMVC API:', () => {
     /**
      * This test requires you to wireup the database to the PUT endpoint so the completed status can be changed
      */
-      it('should PUT a change to the `done` field of an item', function () {
-        const newItem = { task: 'Buy soy milk' };
-        const putItem = { done: true };
+      it('should PUT a change to the `completed` field of an item', function () {
+        const newItem = { title: 'Buy soy milk' };
+        const putItem = { completed: true };
         let itemId;
-        return knex('todo')
+        return knex('items')
         .insert(newItem)
         .returning(['id'])
         .then(function (result) {
@@ -297,14 +297,14 @@ describe('TodoMVC API:', () => {
           return chai.request(app).put(`/api/items/${itemId}`).send(putItem);
         })
         .then(function (result) {
-          result.body.should.have.property('done', true);
+          result.body.should.have.property('completed', true);
           return knex
-            .select('done')
-            .from('todo')
+            .select('completed')
+            .from('items')
             .where('id', itemId);
         })
         .then(function (result) {
-          result[0].should.have.property('done', true);
+          result[0].should.have.property('completed', true);
         })
         .catch((err) => {
           throw (err);
@@ -317,9 +317,9 @@ describe('TodoMVC API:', () => {
      * This test requires you to wire-up the delete endpoint so items can be deleted.
      */
     it('should DELETE an item', function () {
-      const newItem = { task: 'Buy soy milk' };
+      const newItem = { title: 'Buy soy milk' };
       let itemId;
-      return knex('todo')
+      return knex('items')
         .insert(newItem)
         .returning(['id'])
         .then(function (result) {
@@ -328,8 +328,8 @@ describe('TodoMVC API:', () => {
         })
         .then(function () {
           return knex
-            .select('task')
-            .from('todo')
+            .select('title')
+            .from('items')
             .where('id', itemId);
         })
         .then(function (result) {
