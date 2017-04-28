@@ -25,14 +25,17 @@ app.get('/api/items', (req, res) => {
   });
 });
 
-app.post('/api/items', (req, res) => {
-  if(!('task' in req.body)) {
-    return res.sendStatus(400);
+app.post('/api/items', (request, response) => {
+  if(!('task' in request.body)) {
+    return response.sendStatus(400);
   }
+  
   knex('todo')
-    .insert({'task': req.body.task})
+    .insert({'task': request.body.task})
     .returning(['id', 'task'])
-    .then( (result) => { res.status(201).location(`${res.root}${result[0].id}`).json(result[0]); 
+    .then( (result) => {
+      response.status(201).location(`${result[0].id}`).json(result[0]); 
+      //res.status(201).location(`${res.root}${result[0].id}`).json(result[0]); 
   });
 });
 

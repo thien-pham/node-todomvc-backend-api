@@ -174,30 +174,30 @@ describe('TodoMVC API:', () => {
           throw (err);
         });
     });
-});
-  //   /**
-  //    * This test requires you to add a URL to the response which has the location of the new item. 
-  //    */
-  //   it('should respond with a URL which can be used to retrieve the new item', function () {
-  //     const newItem = { title: 'Buy milk' };
-  //     return chai.request(app)
-  //       .post('/api/items')
-  //       .send(newItem)
-  //       .then(function (result) {
-  //         const url = result.body.url;
-  //         const split = url.lastIndexOf('/');
-  //         const root = url.slice(0, split);
-  //         const path = url.substr(split);
-  //         return chai.request(root).get(path);
-  //       })
-  //       .then(function (result) {
-  //         result.body.should.have.property('title', newItem.title);
-  //       })
-  //       .catch((err) => {
-  //         throw (err);
-  //       });
-  //   });
 
+    /**
+     * This test requires you to add a URL to the response which has the location of the new item. 
+     */
+    it('should respond with a URL which can be used to retrieve the new item', function () {
+      const newItem = { task: 'Buy milk' , url: 'Chicken'};
+      return chai.request(app)
+        .post('/api/items')
+        .send(newItem)
+        .then(function (result) {
+          const url = result.body.url;
+          const split = url.lastIndexOf('/');
+          const root = url.slice(0, split);
+          const path = url.substr(split);     
+          return chai.request(root).get(path);
+        })
+        .then(function (result) {
+          result.body.should.have.property('task', newItem.task);
+        })
+        .catch((err) => {
+          throw (err);
+        });
+    });
+  });
   //   /**
   //    * This test requires you to add a `completed` column to the database which defaults to false
   //    */
