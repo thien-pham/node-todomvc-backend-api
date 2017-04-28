@@ -21,7 +21,11 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.use('/', itemsRoutes);
+app.get('/', (req, res) => {
+  res.send('Yolo'); 
+});
+
+//app.use('/', itemsRoutes);
 
 
 // ADD GET POST PUT DELETE ENDPOINTS HERE

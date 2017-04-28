@@ -312,14 +312,14 @@ describe('itemsMVC API:', () => {
       });
     });
 
-  describe('DELETE endpoint', function () {
+    describe('DELETE endpoint', function () {
     /**
      * This test requires you to wire-up the delete endpoint so items can be deleted.
      */
-    it('should DELETE an item', function () {
-      const newItem = { title: 'Buy soy milk' };
-      let itemId;
-      return knex('items')
+      it('should DELETE an item', function () {
+        const newItem = { title: 'Buy soy milk' };
+        let itemId;
+        return knex('items')
         .insert(newItem)
         .returning(['id'])
         .then(function (result) {

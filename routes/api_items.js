@@ -1,5 +1,5 @@
 const express = require('express');
-const knex = require('knex');
+const knex = require('knex')(process.env.DATABASE_URL);
 const router = express.Router();
 
 router.get('/api/items', (req, res) => {  
