@@ -31,12 +31,14 @@ app.post('/api/items', (request, response) => {
   }
   
   knex('todo')
-    .insert({'task': request.body.task})
-    .returning(['id', 'task'])
+    .insert({'task': request.body.task, 'url': request.url})
+    .returning(['id', 'task', 'url'])
     .then( (result) => {
+      const taskUrl = `${result[0].url}/${result[0].id}`;
+      result[0].url = taskUrl;
+      console.log(result[0]);
       response.status(201).location(`${result[0].id}`).json(result[0]); 
-      //res.status(201).location(`${res.root}${result[0].id}`).json(result[0]); 
-  });
+    });
 });
 
 app.get('/api/items/:id', (req, res) => {
@@ -44,9 +46,8 @@ app.get('/api/items/:id', (req, res) => {
     .select()
     .where({'id': req.params.id})
     .then((result) => {
-      // console.log(req.params.id);
       res.status(200).json(result[0]);
-     });
+    });
 });
 
 
